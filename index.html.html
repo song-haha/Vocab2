@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>영어2 천재 강상구 2단원 핵심 단어 퀴즈</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- JS Confetti Library for celebration effect -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        body {
+            font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+            background-color: #f8fafc;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .option-btn {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .option-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        .option-btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+        .fade-in {
+            animation: fadeIn 0.35s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-800 flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+
+    <header class="w-full bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-xl shadow-md shadow-indigo-100">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-slate-900 leading-tight">영어2 (천재 강상구 2단원)</h1>
+                    <p class="text-xs text-slate-500">핵심 단어 & 문맥 유의어 15문항 퀴즈</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2">
+                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100">
+                    <i class="fa-solid fa-bullseye mr-1"></i> 통과 기준: 12문항 이상
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-3xl w-full mx-auto px-4 py-8 flex-grow">
+
+        <!-- 1. START SCREEN -->
+        <div id="start-screen" class="glass-card rounded-2xl p-6 md:p-10 shadow-xl text-center fade-in">
+            <div class="w-20 h-20 bg-indigo-100 text-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-6 text-3xl shadow-inner">
+                <i class="fa-solid fa-book-open"></i>
+            </div>
+            <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-3">단어 실력점검 퀴즈</h2>
+            <p class="text-slate-600 max-w-md mx-auto mb-8 text-sm md:text-base leading-relaxed">
+                2단원의 핵심 어휘와 예문 빈칸을 완성하는 15문항 객관식 퀴즈입니다.<br>
+                12문제 이상 맞추면 **PASS(통과)**를 획득할 수 있습니다!
+            </p>
+
+            <div class="grid grid-cols-3 gap-3 max-w-md mx-auto mb-8 text-left">
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-center">
+                    <span class="block text-xs text-slate-400 font-medium mb-1">총 문항</span>
+                    <span class="text-lg font-bold text-slate-800">15 문제</span>
+                </div>
+                <div class="bg-indigo-50 p-3 rounded-xl border border-indigo-100 text-center">
+                    <span class="block text-xs text-indigo-400 font-medium mb-1">통과 기준</span>
+                    <span class="text-lg font-bold text-indigo-600">12 문제</span>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-center">
+                    <span class="block text-xs text-slate-400 font-medium mb-1">문제 유형</span>
+                    <span class="text-lg font-bold text-slate-800">4지선다</span>
+                </div>
+            </div>
+
+            <button id="start-btn" onclick="startQuiz()" class="w-full sm:w-auto px-8 py-4 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold rounded-xl shadow-lg shadow-indigo-200 transition-all text-lg inline-flex items-center justify-center">
+                <i class="fa-solid fa-play mr-2 text-sm"></i> 퀴즈 시작하기
+            </button>
+        </div>
+
+        <!-- 2. QUIZ INTERACTIVE SCREEN -->
+        <div id="quiz-screen" class="hidden space-y-6 fade-in">
+            <!-- Progress Bar Card -->
+            <div class="glass-card rounded-xl p-4 shadow-sm flex items-center justify-between gap-4">
+                <div class="flex-grow">
+                    <div class="flex justify-between text-xs font-semibold text-slate-500 mb-1">
+                        <span>진행률</span>
+                        <span id="question-progress-text">1 / 15</span>
+                    </div>
+                    <div class="w-full bg-slate-200 rounded-full h-2.5 overflow-hidden">
+                        <div id="progress-bar" class="bg-indigo-600 h-2.5 rounded-full transition-all duration-300 w-0"></div>
+                    </div>
+                </div>
+                <div class="shrink-0 text-right pl-2 border-l border-slate-200">
+                    <span class="text-xs text-slate-400 block font-medium">현재 점수</span>
+                    <span id="current-score-text" class="text-base font-extrabold text-indigo-600">0 점</span>
+                </div>
+            </div>
+
+            <!-- Question Card -->
+            <div class="glass-card rounded-2xl p-6 md:p-8 shadow-lg relative overflow-hidden">
+                <div class="flex items-center justify-between mb-4">
+                    <span id="q-badge" class="px-3 py-1 bg-indigo-100 text-indigo-700 text-xs font-bold rounded-full">
+                        Question 01
+                    </span>
+                    <span class="text-xs text-slate-400 font-medium">한국어 의미를 고르세요</span>
+                </div>
+
+                <!-- Word Display -->
+                <div class="mb-6">
+                    <h3 id="target-word" class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight mb-3 text-indigo-600">
+                        word
+                    </h3>
+                    <!-- Example Sentence -->
+                    <div class="bg-slate-50 border-l-4 border-indigo-500 p-4 rounded-r-xl text-slate-700 text-sm md:text-base leading-relaxed italic">
+                        <p id="example-sentence">Loading sentence...</p>
+                    </div>
+                </div>
+
+                <!-- Options Grid -->
+                <div id="options-container" class="grid grid-cols-1 gap-3 mb-6">
+                    <!-- Dynamic choices will be injected here -->
+                </div>
+
+                <!-- Feedback Footer -->
+                <div id="feedback-box" class="hidden p-4 rounded-xl text-sm font-medium flex items-start space-x-3 fade-in">
+                    <i id="feedback-icon" class="text-lg mt-0.5"></i>
+                    <div class="flex-grow">
+                        <p id="feedback-title" class="font-bold text-base"></p>
+                        <p id="feedback-desc" class="text-xs md:text-sm mt-0.5"></p>
+                    </div>
+                </div>
+
+                <!-- Next Button Container -->
+                <div class="mt-6 text-right">
+                    <button id="next-btn" onclick="nextQuestion()" disabled class="px-6 py-3 bg-slate-300 text-slate-500 font-bold rounded-xl transition-all inline-flex items-center cursor-not-allowed">
+                        다음 문제 <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. RESULT SCREEN (Pass/Fail) -->
+        <div id="result-screen" class="hidden space-y-6 fade-in">
+            <!-- Dynamic Result Card -->
+            <div id="result-header-card" class="glass-card rounded-2xl p-8 shadow-xl text-center relative overflow-hidden">
+                <!-- Content injected dynamically -->
+            </div>
+
+            <!-- Detailed Answer Review Section -->
+            <div class="glass-card rounded-2xl p-6 shadow-md">
+                <div class="flex items-center justify-between mb-4 border-b border-slate-200 pb-3">
+                    <h3 class="font-bold text-slate-800 text-lg flex items-center">
+                        <i class="fa-solid fa-clipboard-check text-indigo-600 mr-2"></i> 정답 및 상세 해설
+                    </h3>
+                    <span class="text-xs text-slate-500">전체 15문항 결과</span>
+                </div>
+                <div id="review-list" class="space-y-4 max-h-[450px] overflow-y-auto pr-2">
+                    <!-- Review items injected dynamically -->
+                </div>
+            </div>
+
+            <!-- Mini Vocabulary Table Section -->
+            <div class="glass-card rounded-2xl p-6 shadow-md">
+                <div class="flex items-center justify-between mb-4 border-b border-slate-200 pb-3">
+                    <h3 class="font-bold text-slate-800 text-lg flex items-center">
+                        <i class="fa-solid fa-book text-indigo-600 mr-2"></i> 복습용 미니 단어장
+                    </h3>
+                    <span class="text-xs bg-indigo-50 text-indigo-700 px-2.5 py-1 rounded-full font-medium">15개 핵심 어휘</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-slate-600">
+                        <thead class="bg-slate-100 text-slate-700 text-xs uppercase rounded-lg">
+                            <tr>
+                                <th class="p-3 rounded-l-lg">단어 / 숙어</th>
+                                <th class="p-3">품사</th>
+                                <th class="p-3">한국어 뜻</th>
+                                <th class="p-3 rounded-r-lg">유의어 / 동의어</th>
+                            </tr>
+                        </thead>
+                        <tbody id="vocab-table-body" class="divide-y divide-slate-100">
+                            <!-- Vocab rows injected dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Bottom Action Buttons -->
+            <div class="text-center pt-2">
+                <button onclick="restartQuiz()" class="px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-indigo-200 transition-all text-lg inline-flex items-center">
+                    <i class="fa-solid fa-rotate-right mr-2"></i> 다시 도전하기
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="w-full py-4 text-center text-xs text-slate-400 border-t border-slate-200 bg-white">
+        영어2 천재(강상구) 2단원 Vocabulary Learning App • 15 Questions Quiz
+    </footer>
+
+    <script>
+        const quizData = [
+            {
+                word: "opt out of",
+                pos: "숙어",
+                sentence: "Users can choose to ___ the mailing list if they do not wish to receive updates.",
+                sentenceKo: "사용자는 업데이트 수신을 원치 않을 경우 메일링 리스트에서 빠질 수 있습니다.",
+                correct: "~에서 빠지다, 탈퇴하다",
+                distractors: ["~에 전념하다", "~을 준수하다", "~을 제안하다"],
+                synonym: "withdraw from, leave",
+                explanation: "opt out of는 특정 서비스, 그룹, 계약 등에서 '빠지다, 탈퇴하다'를 의미합니다."
+            },
+            {
+                word: "prompt A to do",
+                pos: "숙어",
+                sentence: "The rise in energy costs ___ed many households to conserve electricity.",
+                sentenceKo: "에너지 비용 상승은 많은 가구가 전기를 절약하도록 촉구했습니다.",
+                correct: "A가 ~하도록 촉구하다, 유도하다",
+                distractors: ["A가 ~하는 것을 금지하다", "A가 ~하도록 강제하다", "A가 ~하는 것을 연기하다"],
+                synonym: "encourage, motivate, incite",
+                explanation: "prompt A to do는 A라는 대상이 어떠한 행동을 하도록 '자극하거나 유도하다'라는 뜻입니다."
+            },
+            {
+                word: "sugary",
+                pos: "형용사",
+                sentence: "Consuming too many ___ drinks can lead to health problems.",
+                sentenceKo: "설탕이 든 음료를 너무 많이 섭취하면 건강 문제를 일으킬 수 있습니다.",
+                correct: "설탕이 든, 단",
+                distractors: ["쓴, 자극적인", "신선한, 유기농의", "영양가가 높은"],
+                synonym: "sweet",
+                explanation: "sugary는 설탕 성분이 포함되어 '달콤한, 설탕이 든'을 뜻합니다."
+            },
+            {
+                word: "neutralize",
+                pos: "동사",
+                sentence: "The new policy was designed to ___ the negative impact of the price hike.",
+                sentenceKo: "새 정책은 가격 인상의 부작용을 상쇄하기 위해 설계되었습니다.",
+                correct: "상쇄하다, 무효화하다",
+                distractors: ["강화하다, 증대시키다", "유지하다, 보존하다", "승인하다, 허가하다"],
+                synonym: "counteract, offset",
+                explanation: "neutralize는 상대적인 힘이나 영향을 중화시켜 '상쇄하다, 무효화하다'라는 뜻입니다."
+            },
+            {
+                word: "disobey",
+                pos: "동사",
+                sentence: "Drivers who ___ traffic rules put themselves and others in danger.",
+                sentenceKo: "교통 법규를 위반하는 운전자는 자신과 타인을 위험에 빠뜨립니다.",
+                correct: "따르지 않다, 위반하다",
+                distractors: ["철저히 준수하다", "개정하다, 수정하다", "홍보하다, 알리다"],
+                synonym: "violate, defy (↔ obey)",
+                explanation: "disobey는 규칙이나 명령을 '따르지 않다, 불복종하다, 위반하다'를 의미합니다."
+            },
+            {
+                word: "peer pressure",
+                pos: "명사",
+                sentence: "Teenagers often feel ___ to adopt the habits of their friends.",
+                sentenceKo: "십 대들은 종종 친구들의 습관을 따르도록 또래 압력을 느낍니다.",
+                correct: "동조 압력, 또래 압력",
+                distractors: ["부모의 기대감", "학업 스트레스", "경쟁 심리"],
+                synonym: "social pressure",
+                explanation: "peer pressure는 동년배 집단이나 또래 친구들로부터 받는 '동조 압력'을 의미합니다."
+            },
+            {
+                word: "institute",
+                pos: "동사",
+                sentence: "The city decided to ___ new safety guidelines for pedestrian crosswalks.",
+                sentenceKo: "시는 횡단보도 안전 지침을 새롭게 시행하기로 결정했습니다.",
+                correct: "시행하다, 도입하다",
+                distractors: ["폐지하다, 철회하다", "연기하다, 미루다", "비판하다, 지적하다"],
+                synonym: "introduce, implement, enact",
+                explanation: "institute는 제도나 규칙, 방침 등을 '도입하다, 시행하다'라는 의미의 동사입니다."
+            },
+            {
+                word: "illusion",
+                pos: "명사",
+                sentence: "The painted lines created an ___ that made drivers feel they were speeding up.",
+                sentenceKo: "그려진 선들은 운전자가 속도를 내고 있다고 느끼게 만드는 착각을 일으켰습니다.",
+                correct: "착각, 환상",
+                distractors: ["선명한 현실", "명확한 증거", "시각적 경고"],
+                synonym: "delusion, hallucination",
+                explanation: "illusion은 실제와 다르게 느끼게 만드는 '착각, 환상, 오인'을 뜻합니다."
+            },
+            {
+                word: "choice architect",
+                pos: "명사",
+                sentence: "A ___ arranges options in a way that subtly influences people's decisions.",
+                sentenceKo: "선택 설계자는 사람들의 결정에 미묘하게 영향을 주도록 선택지를 배치합니다.",
+                correct: "선택 설계자",
+                distractors: ["건축 설계사", "경제학 교수", "소비자 감독관"],
+                synonym: "decision environment designer",
+                explanation: "choice architect는 행동경제학에서 사람들의 선택 환경을 설계하는 주체를 뜻합니다."
+            },
+            {
+                word: "disposable",
+                pos: "형용사",
+                sentence: "To reduce paper waste, the school encouraged students to stop using ___ cups.",
+                sentenceKo: "종이 낭비를 줄이기 위해 학교는 학생들에게 일회용 컵 사용 중단을 권장했습니다.",
+                correct: "일회용의",
+                distractors: ["재사용 가능한", "내구성이 뛰어난", "친환경적인"],
+                synonym: "single-use, throwaway",
+                explanation: "disposable은 사용 후 버리는 '일회용의, 처분 가능한'을 의미합니다."
+            },
+            {
+                word: "nudge",
+                pos: "동사/명사",
+                sentence: "A gentle ___ can encourage people to choose healthier food options.",
+                sentenceKo: "부드러운 유도(넛지)는 사람들이 더 건강한 음식을 선택하도록 도울 수 있습니다.",
+                correct: "(팔꿈치로) 슬쩍 찌르다; 부드럽게 유도하다",
+                distractors: ["강압적으로 지시하다", "엄격히 금지하다", "외면하고 무시하다"],
+                synonym: "encourage gently, prompt",
+                explanation: "nudge는 강요하지 않고 타인의 행동을 '부드럽게 유도하는 개입'을 의미합니다."
+            },
+            {
+                word: "markedly",
+                pos: "부사",
+                sentence: "Driver speed decreased ___ after the new pavement markings were installed.",
+                sentenceKo: "노면 표시가 설치된 후 운전자의 속도가 현저하게 줄어들었습니다.",
+                correct: "현저하게, 뚜렷하게",
+                distractors: ["미미하게, 거의 없게", "일시적으로", "우연히, 불규칙하게"],
+                synonym: "noticeably, significantly",
+                explanation: "markedly는 눈에 띌 정도로 '현저하게, 뚜렷하게'를 의미하는 부사입니다."
+            },
+            {
+                word: "sustainable",
+                pos: "형용사",
+                sentence: "The campaign aims to promote ___ energy consumption habits.",
+                sentenceKo: "이 캠페인은 지속 가능한 에너지 소비 습관을 진흥하는 것을 목표로 합니다.",
+                correct: "지속 가능한",
+                distractors: ["단기적인", "일시적인", "낭비적인"],
+                synonym: "eco-friendly, maintainable",
+                explanation: "sustainable은 환경을 해치지 않고 오랫동안 유지/보존될 수 있는 '지속 가능한'을 뜻합니다."
+            },
+            {
+                word: "behavioral economics",
+                pos: "명사",
+                sentence: "___ combines psychology and economics to explain why people make irrational choices.",
+                sentenceKo: "행동경제학은 심리학과 경제학을 결합하여 비이성적 선택을 설명합니다.",
+                correct: "행동경제학",
+                distractors: ["고전경제학", "소비자 심리학", "경영 통계학"],
+                synonym: "psychology-based economics",
+                explanation: "behavioral economics는 인간의 심리적 특성을 반영하여 경제적 의사결정을 분석하는 학문입니다."
+            },
+            {
+                word: "forbid",
+                pos: "동사",
+                sentence: "School rules strictly ___ students from leaving campus during lunch hours.",
+                sentenceKo: "학교 규칙은 점심시간 동안 학생들이 학교 밖으로 나가는 것을 엄격히 금지합니다.",
+                correct: "금지하다",
+                distractors: ["권장하다, 장려하다", "허용하다, 승인하다", "관찰하다, 지켜보다"],
+                synonym: "ban, prohibit (↔ allow)",
+                explanation: "forbid는 법이나 규칙으로 어떤 행동을 하지 못하도록 '금지하다'를 뜻합니다."
+            }
+        ];
+
+        let currentQuestions = [];
+        let currentIndex = 0;
+        let score = 0;
+        let userAnswers = []; // Array storing user's selected choices and status
+
+        function shuffleArray(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function startQuiz() {
+            // Prepare shuffled questions
+            currentQuestions = shuffleArray(quizData).map(q => {
+                // Combine correct answer with distractors and shuffle options
+                const options = shuffleArray([q.correct, ...q.distractors]);
+                return { ...q, options };
+            });
+
+            currentIndex = 0;
+            score = 0;
+            userAnswers = [];
+
+            // UI Screen Switching
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const q = currentQuestions[currentIndex];
+            
+            // Progress Bar & Question Counter Update
+            const progressPercent = ((currentIndex) / currentQuestions.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+            document.getElementById('question-progress-text').innerText = `${currentIndex + 1} / ${currentQuestions.length}`;
+            document.getElementById('current-score-text').innerText = `${score} 점`;
+
+            // Question Details
+            document.getElementById('q-badge').innerText = `Question ${String(currentIndex + 1).padStart(2, '0')}`;
+            document.getElementById('target-word').innerText = q.word;
+            
+            // Highlight blank in sentence
+            const formattedSentence = q.sentence.replace('___', '<span class="bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded border border-indigo-200">___</span>');
+            document.getElementById('example-sentence').innerHTML = `"${formattedSentence}"`;
+
+            // Reset Options Container
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = `option-btn w-full p-4 text-left border-2 border-slate-200 hover:border-indigo-400 rounded-xl bg-white text-slate-700 font-medium text-sm md:text-base flex items-center justify-between group`;
+                btn.onclick = () => selectAnswer(idx, opt, q.correct);
+                btn.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <span class="w-7 h-7 rounded-lg bg-slate-100 text-slate-500 font-bold text-xs flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-colors shrink-0">
+                            ${idx + 1}
+                        </span>
+                        <span>${opt}</span>
+                    </div>
+                    <i class="fa-regular fa-circle text-slate-300 group-hover:text-indigo-500 text-lg"></i>
+                `;
+                optionsContainer.appendChild(btn);
+            });
+
+            // Hide feedback box and disable Next button initially
+            const feedbackBox = document.getElementById('feedback-box');
+            feedbackBox.className = 'hidden p-4 rounded-xl text-sm font-medium flex items-start space-x-3 fade-in';
+            
+            const nextBtn = document.getElementById('next-btn');
+            nextBtn.disabled = true;
+            nextBtn.className = 'px-6 py-3 bg-slate-200 text-slate-400 font-bold rounded-xl transition-all inline-flex items-center cursor-not-allowed';
+            nextBtn.innerText = currentIndex === currentQuestions.length - 1 ? '결과 확인하기' : '다음 문제';
+        }
+
+        function selectAnswer(selectedIndex, selectedOption, correctAnswer) {
+            const isCorrect = (selectedOption === correctAnswer);
+            const q = currentQuestions[currentIndex];
+
+            // Store result
+            userAnswers.push({
+                question: q,
+                selected: selectedOption,
+                isCorrect: isCorrect
+            });
+
+            if (isCorrect) {
+                score += 1;
+            }
+
+            // Update option buttons state
+            const buttons = document.querySelectorAll('.option-btn');
+            buttons.forEach((btn, idx) => {
+                btn.disabled = true;
+                const optionText = q.options[idx];
+                
+                if (optionText === correctAnswer) {
+                    btn.className = 'option-btn w-full p-4 text-left border-2 border-emerald-500 bg-emerald-50 text-emerald-900 font-bold rounded-xl text-sm md:text-base flex items-center justify-between';
+                    btn.querySelector('i').className = 'fa-solid fa-circle-check text-emerald-600 text-lg';
+                } else if (idx === selectedIndex && !isCorrect) {
+                    btn.className = 'option-btn w-full p-4 text-left border-2 border-rose-400 bg-rose-50 text-rose-900 font-bold rounded-xl text-sm md:text-base flex items-center justify-between';
+                    btn.querySelector('i').className = 'fa-solid fa-circle-xmark text-rose-500 text-lg';
+                } else {
+                    btn.className = 'option-btn w-full p-4 text-left border border-slate-200 bg-slate-50 text-slate-400 rounded-xl text-sm md:text-base flex items-center justify-between opacity-60';
+                }
+            });
+
+            // Feedback Box Display
+            const feedbackBox = document.getElementById('feedback-box');
+            const feedbackIcon = document.getElementById('feedback-icon');
+            const feedbackTitle = document.getElementById('feedback-title');
+            const feedbackDesc = document.getElementById('feedback-desc');
+
+            feedbackBox.classList.remove('hidden');
+            if (isCorrect) {
+                feedbackBox.classList.add('bg-emerald-50', 'text-emerald-800', 'border', 'border-emerald-200');
+                feedbackIcon.className = 'fa-solid fa-circle-check text-emerald-600 text-lg mt-0.5';
+                feedbackTitle.innerText = '정답입니다! 🎉';
+            } else {
+                feedbackBox.classList.add('bg-rose-50', 'text-rose-800', 'border', 'border-rose-200');
+                feedbackIcon.className = 'fa-solid fa-triangle-exclamation text-rose-600 text-lg mt-0.5';
+                feedbackTitle.innerText = `아쉽네요. 정답은 "${correctAnswer}" 입니다.`;
+            }
+            feedbackDesc.innerText = q.explanation;
+
+            // Enable Next Question Button
+            const nextBtn = document.getElementById('next-btn');
+            nextBtn.disabled = false;
+            nextBtn.className = 'px-6 py-3 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold rounded-xl shadow-md transition-all inline-flex items-center cursor-pointer';
+            
+            // Update realtime score display
+            document.getElementById('current-score-text').innerText = `${score} 점`;
+        }
+
+        function nextQuestion() {
+            if (currentIndex < currentQuestions.length - 1) {
+                currentIndex++;
+                renderQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('quiz-screen').classList.add('hidden');
+            const resultScreen = document.getElementById('result-screen');
+            resultScreen.classList.remove('hidden');
+
+            const isPassed = score >= 12;
+            const headerCard = document.getElementById('result-header-card');
+
+            if (isPassed) {
+                // PASS SCREEN UI (12 ~ 15)
+                headerCard.innerHTML = `
+                    <div class="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4 text-4xl shadow-inner">
+                        🎉
+                    </div>
+                    <span class="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-extrabold rounded-full inline-block mb-2">
+                        PASS • 합격
+                    </span>
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-2">
+                        축하합니다! 기준 점수를 통과하셨습니다.
+                    </h2>
+                    <div class="text-4xl font-black text-emerald-600 my-4">
+                        ${score} <span class="text-lg text-slate-400 font-medium">/ 15 점</span>
+                    </div>
+                    <p class="text-slate-600 text-sm md:text-base max-w-lg mx-auto leading-relaxed">
+                        대단합니다! 영어2 2단원의 핵심 어휘를 완벽하게 숙지하고 계시네요. 문맥 속 단어의 활용까지 훌륭하게 파악하셨습니다.
+                    </p>
+                `;
+
+                // Confetti Animation Trigger for Celebration
+                if (typeof confetti === 'function') {
+                    confetti({
+                        particleCount: 100,
+                        spread: 70,
+                        origin: { y: 0.6 }
+                    });
+                }
+            } else {
+                // FAIL SCREEN UI (0 ~ 11)
+                headerCard.innerHTML = `
+                    <div class="w-20 h-20 bg-rose-100 text-rose-600 rounded-2xl flex items-center justify-center mx-auto mb-4 text-4xl shadow-inner">
+                        🔄
+                    </div>
+                    <span class="px-3 py-1 bg-rose-100 text-rose-700 text-xs font-extrabold rounded-full inline-block mb-2">
+                        RETRY • 재도전 필요
+                    </span>
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-2">
+                        아쉽습니다! 다시 도전해 보세요.
+                    </h2>
+                    <div class="text-4xl font-black text-rose-600 my-4">
+                        ${score} <span class="text-lg text-slate-400 font-medium">/ 15 점</span>
+                    </div>
+                    <p class="text-slate-600 text-sm md:text-base max-w-lg mx-auto leading-relaxed">
+                        통과 기준은 <strong class="text-indigo-600">12개 이상</strong>입니다.<br>
+                        아래 해설과 복습 단어장을 다시 확인한 후 재도전해 보세요!
+                    </p>
+                `;
+            }
+
+            // Render Detailed Review Item List
+            renderReviewList();
+
+            // Render Vocabulary Table
+            renderVocabTable();
+        }
+
+        function renderReviewList() {
+            const reviewContainer = document.getElementById('review-list');
+            reviewContainer.innerHTML = '';
+
+            userAnswers.forEach((ans, idx) => {
+                const q = ans.question;
+                const item = document.createElement('div');
+                item.className = `p-4 rounded-xl border text-sm ${
+                    ans.isCorrect ? 'bg-emerald-50/50 border-emerald-200' : 'bg-rose-50/50 border-rose-200'
+                }`;
+
+                item.innerHTML = `
+                    <div class="flex items-start justify-between gap-2 mb-2">
+                        <div class="flex items-center space-x-2">
+                            <span class="font-bold text-xs px-2 py-0.5 rounded ${ans.isCorrect ? 'bg-emerald-600 text-white' : 'bg-rose-500 text-white'}">
+                                Q${idx + 1}
+                            </span>
+                            <span class="font-extrabold text-slate-900 text-base">${q.word}</span>
+                            <span class="text-xs text-slate-400">(${q.pos})</span>
+                        </div>
+                        <span class="text-xs font-bold ${ans.isCorrect ? 'text-emerald-600' : 'text-rose-600'} flex items-center">
+                            <i class="${ans.isCorrect ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-xmark'} mr-1"></i>
+                            ${ans.isCorrect ? '정답' : '오답'}
+                        </span>
+                    </div>
+                    <p class="text-slate-700 italic text-xs md:text-sm mb-2 bg-white/60 p-2 rounded border border-slate-100">
+                        "${q.sentence.replace('___', `<strong>${q.word}</strong>`)}"
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+                        <div>
+                            <span class="text-slate-400">선택한 답:</span>
+                            <span class="${ans.isCorrect ? 'text-emerald-700 font-semibold' : 'text-rose-700 font-semibold'}">${ans.selected}</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400">올바른 정답:</span>
+                            <span class="text-indigo-700 font-semibold">${q.correct}</span>
+                        </div>
+                    </div>
+                    <p class="text-slate-500 text-xs mt-2 pt-2 border-t border-slate-200/60">
+                        💡 <strong>해설:</strong> ${q.explanation} (예문 해석: ${q.sentenceKo})
+                    </p>
+                `;
+                reviewContainer.appendChild(item);
+            });
+        }
+
+        function renderVocabTable() {
+            const tableBody = document.getElementById('vocab-table-body');
+            tableBody.innerHTML = '';
+
+            quizData.forEach((item) => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50 transition-colors';
+                tr.innerHTML = `
+                    <td class="p-3 font-bold text-slate-900">${item.word}</td>
+                    <td class="p-3 text-xs text-slate-500">${item.pos}</td>
+                    <td class="p-3 text-indigo-700 font-medium">${item.correct}</td>
+                    <td class="p-3 text-xs text-slate-500">${item.synonym || '-'}</td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        }
+
+        function restartQuiz() {
+            startQuiz();
+        }
+    </script>
+</body>
+</html>
